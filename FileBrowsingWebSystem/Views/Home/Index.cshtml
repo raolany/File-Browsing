@@ -3,7 +3,30 @@
     <div class="panel-heading"><b>Path : </b></div>
     <div class="panel-body">
         <div class="">
-            <a ng-click="pathClick(-1)">Server/</a><a ng-repeat="dir in pathlist" ng-click="pathClick($index)">{{dir}}/</a>
+            <a ng-click="pathClick(-1)">Server = </a>
+            <a ng-repeat="dir in pathlist" ng-click="pathClick($index)">
+                {{dir}}<span ng-if="$index > 0">\</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><b>Count of files : </b></div>
+    <div class="panel-body">
+        <div>
+            <table class="table text-center">
+                <tr>
+                    <th class="text-center">Less 10 MB</th>
+                    <th class="text-center">10 MB - 100 MB</th>
+                    <th class="text-center">More 100 MB</th>
+                </tr>
+                <tr>
+                    <td>{{less10}}</td>
+                    <td>{{others}}</td>
+                    <td>{{more100}}</td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
@@ -13,10 +36,10 @@
     <div class="panel-body">
         <a ng-repeat="dir in dirs" ng-click="dirClick(dir)">
             <span ng-if="$index > 0"><br/></span>
-            {{dir}}
+            <span class="glyphicon glyphicon-folder-close"> </span> {{dir}}
         </a>
         <span ng-repeat="file in files">
-            <span ng-if="dirs.length > 0"><br /></span>
+            <span ng-if="dirs.length > 0 || $index > 0"><br /></span>
             {{file}}
         </span>
     </div>

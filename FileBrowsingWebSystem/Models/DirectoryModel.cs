@@ -14,13 +14,12 @@ namespace FileBrowsingWebSystem.Models
         public List<string> PathList { get; set; }
         public List<string> Dirs { get; set; }
         public List<string> Files { get; set; }
-        private string rootpath = HostingEnvironment.MapPath("/");
 
         public DirectoryModel(string path)
         {
             Dirs = new List<string>();
             Files = new List<string>();
-            PathList = path.Equals("/") ? new List<string>() : new List<string>(path.Split('/'));
+            PathList = path.Equals("server") ? new List<string>() : new List<string>(path.Split('/'));
             Init(path);
         }
 
@@ -28,7 +27,16 @@ namespace FileBrowsingWebSystem.Models
         {
             Path = path;
 
-            DirectoryInfo dir = new DirectoryInfo(rootpath+Path);
+            //all hds
+            if (Path.Equals("server"))
+            {
+                var drvrs = Directory.GetLogicalDrives();
+                Dirs = new List<string>(drvrs);
+                return;
+            }
+
+            //files and dirs on hd
+            DirectoryInfo dir = new DirectoryInfo(Path);
             foreach (var catalog in dir.GetDirectories())
             {
                 Dirs.Add(catalog.Name);
@@ -38,5 +46,6 @@ namespace FileBrowsingWebSystem.Models
                 Files.Add(file.Name);
             }
         }
+
     }
 }

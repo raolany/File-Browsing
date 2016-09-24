@@ -2,31 +2,31 @@
 
 app.controller('AppController', function ($scope, $http) {
 
-    $http.get("/api/path/")
-        .success(function (response) {
+    $http.get("/api/directory/")
+        .then(function (response) {
 
-            $scope.host = response.Host;
-            $scope.pathlist = response.PathList;
-            $scope.dirs = response.Dirs;
-            $scope.files = response.Files;
-
+            $scope.pathlist = response.data.PathList;
+            $scope.dirs = response.data.Dirs;
+            $scope.files = response.data.Files;
         }, function errorCallback(response) {
-
             console.log("error", response);
         });
+
+    getCountOfFiles("server");
 
     $scope.dirClick = function (dir) {
 
         var fullpath = $scope.pathlist.toString().replace(/,/g, "/");
         fullpath = (fullpath.length !== 0) ? fullpath + "/" : fullpath;
 
-        $http.get("/api/path/?path=" + fullpath + dir)
-            .success(function (response) {
+        getCountOfFiles(fullpath + dir);
 
-                $scope.host = response.Host;
-                $scope.pathlist = response.PathList;
-                $scope.dirs = response.Dirs;
-                $scope.files = response.Files;
+        $http.get("/api/directory/?path=" + fullpath + dir)
+            .then(function (response) {
+
+                $scope.pathlist = response.data.PathList;
+                $scope.dirs = response.data.Dirs;
+                $scope.files = response.data.Files;
 
                 console.log(response);
 
@@ -37,31 +37,47 @@ app.controller('AppController', function ($scope, $http) {
     }
 
     $scope.pathClick = function (index) {
-        var fullpath = "/";
+        var fullpath = "";
 
-        if (index !== -1) {
+        if (index === -1) {
+            fullpath = "server";
+        }
+        else {
             fullpath = $scope.pathlist.slice(0, index+1).toString().replace(/,/g, "/");
         }
-        //fullpath = (fullpath.length !== 0) ? fullpath + "/" : fullpath;
+        getCountOfFiles(fullpath);
 
-        $http.get("/api/path/?path=" + fullpath)
-            .success(function(response) {
+        $http.get("/api/directory/?path=" + fullpath)
+            .then(function(response) {
 
-                $scope.host = response.Host;
-                $scope.pathlist = response.PathList;
-                $scope.dirs = response.Dirs;
-                $scope.files = response.Files;
+                $scope.pathlist = response.data.PathList;
+                $scope.dirs = response.data.Dirs;
+                $scope.files = response.data.Files;
 
                 console.log(response);
 
             },
             function errorCallback(response) {
-                console.log("error", response);
+                console.log("Message: " + response.data.ExceptionMessage + "\nError type: " + response.data.ExceptionType);
+                //console.log("error", response);
+        });
+    }
+
+    function getCountOfFiles(path) {
+        $http.get("/api/directory/getfiles/?path="+path)
+        .then(function (response) {
+            $scope.less10 = response.data.FilesLess10;
+            $scope.others = response.data.FilesOthers;
+            $scope.more100 = response.data.FilesMore100;
+        }, function errorCallback(response) {
+
+            $scope.less10 = 0;
+            $scope.others = 0;
+            $scope.more100 = 0;
+
+            console.log("Message: " + response.data.ExceptionMessage + "\nError type: " + response.data.ExceptionType);
+            //console.log("error", response);
         });
     }
 
 });
-
-function getDir(dir) {
-    
-}

@@ -10,7 +10,6 @@ namespace FileBrowsingWebSystem.Controllers
     {
         public ActionResult Index()
         {
-            Server.MapPath("");
             ViewBag.Title = "Home Page";
 
             return View();

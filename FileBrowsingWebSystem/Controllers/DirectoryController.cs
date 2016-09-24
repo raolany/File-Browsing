@@ -8,17 +8,16 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http;
+using System.Web.Routing;
 using FileBrowsingWebSystem.Models;
 
 namespace FileBrowsingWebSystem.Controllers
 {
-    public class PathController : ApiController
+    public class DirectoryController : ApiController
     {
-        //string rootpath = HostingEnvironment.MapPath("/");
-
         public DirectoryModel Get()
         {
-            return new DirectoryModel("/");
+            return new DirectoryModel("server");
         }
 
         public DirectoryModel Get([FromUri]string path)
@@ -26,19 +25,10 @@ namespace FileBrowsingWebSystem.Controllers
             return new DirectoryModel(path);
         }
 
-        /*// POST: api/Path
-        public void Post([FromBody]string value)
+        [Route("api/directory/getfiles")]
+        public FileModel GetFiles([FromUri]string path)
         {
+            return new FileModel(path);
         }
-
-        // PUT: api/Path/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Path/5
-        public void Delete(int id)
-        {
-        }*/
     }
 }
