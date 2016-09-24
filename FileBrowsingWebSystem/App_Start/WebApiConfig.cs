@@ -14,11 +14,19 @@ namespace FileBrowsingWebSystem
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            //config.Routes.MapHttpRoute(
+            //    name: "PathParamRoute",
+            //    routeTemplate: "api/{controller}/{action}/{path}"
+            //);
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            // disable xml output data
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
         }
     }
 }

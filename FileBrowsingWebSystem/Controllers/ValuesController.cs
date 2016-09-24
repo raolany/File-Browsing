@@ -18,6 +18,10 @@ namespace FileBrowsingWebSystem.Controllers
         // GET api/values/5
         public string Get(int id)
         {
+            if (id == 0)
+            {
+                return "value0";
+            }
             return "value";
         }
 
